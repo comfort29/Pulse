@@ -1,1 +1,3 @@
-*.pb linguist-language=PureBasic
+
+* linguist-vendored
+*.pb linguist-vendored=false
