@@ -50,6 +50,67 @@ Procedure.l Pulse_Seeker_CompareNC(*MemAdr1.byte, *MemAdr2.byte, size.l)   ; A n
   EndIf
 EndProcedure
 
+;
+; Pulse_Seeker_CompareNC_Ex - Faster no-case compare.
+;
+ProcedureDLL Pulse_Seeker_CompareNC_Ex(*MemAdr1.byte, *MemAdr2.byte, size.l)
+  
+  CompilerIf #PB_Compiler_Processor = #PB_Processor_x86 
+    EnableASM
+    ! cmp dword [p.v_size],0
+    ! jle _ZeroIt ;ll_pulse_seeker_comparenc_ex
+    ! push edi
+    ! push esi
+    ! mov edi,dword [p.p_MemAdr1+8]
+    ! mov esi,dword [p.p_MemAdr2+8]
+    ! xor ecx,ecx
+    LoopIt:
+    ! movzx eax,byte [esi+ecx]
+    ! mov dl,byte [eax+l_mcnc_data]
+    ! movzx eax,byte [edi+ecx]
+    ! cmp dl,byte [eax+l_mcnc_data]
+    ! jnz ll_pulse_seeker_comparenc_ex_nomatch
+    ! inc ecx
+    ! cmp ecx,dword [p.v_size+8]
+    ! jne ll_pulse_seeker_comparenc_ex_loopit
+    ! pop esi
+    ! pop edi
+    ! mov eax,1
+    ProcedureReturn
+    NoMatch:
+    ! pop esi
+    ! pop edi
+    DisableASM
+    !_ZeroIt:
+  CompilerElse
+    EnableASM
+    ! cmp dword [p.v_size],0
+    ! jle ll_pulse_seeker_comparenc_ex_zeroit
+    ! push rbp
+    ! mov r8,qword [p.p_MemAdr1+8]
+    ! mov r9,qword [p.p_MemAdr2+8]
+    ! mov rbp,l_mcnc_data
+    ! xor rcx,rcx
+    LoopIt:
+    ! movzx rax,byte [r8+rcx]
+    ! mov dl,byte [rax+rbp]
+    ! movzx rax,byte [r9+rcx]
+    ! cmp dl,byte [rax+rbp]
+    ! jnz ll_pulse_seeker_comparenc_ex_nomatch
+    ! inc rcx
+    ! cmp ecx,dword [p.v_size+8]
+    ! jne ll_pulse_seeker_comparenc_ex_loopit
+    ! pop rbp
+    ! mov rax,1
+    ProcedureReturn
+    NoMatch:
+    ! pop rbp
+    DisableASM
+    ZeroIt:
+  CompilerEndIf
+    
+EndProcedure
+
 DataSection
   MCNC_data:
   Data.a   0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15 ; chr table - A=a etc..
