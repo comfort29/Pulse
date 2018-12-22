@@ -14,7 +14,7 @@ EndStructure
 CompilerIf #PB_Compiler_OS = #PB_OS_Windows
   #EOL_SIZE=2
   Procedure Pulse_Seeker_NextEol(*seeker.sk, *seeker_end)
-    While *seeker<*seeker_end  And *seeker\w <> 2573    ; 0D 0A
+    While *seeker < *seeker_end  And *seeker\w <> 2573    ; 0D 0A
       *seeker+1
     Wend
     ProcedureReturn *seeker
@@ -22,7 +22,7 @@ CompilerIf #PB_Compiler_OS = #PB_OS_Windows
 CompilerElse
   #EOL_SIZE=1
   Procedure Pulse_Seeker_NextEol(*seeker.sk, *seeker_end)
-    While *seeker<*seeker_end  And *seeker\b <> 10      ; 0A
+    While *seeker < *seeker_end  And *seeker\b <> 10      ; 0A
       *seeker+1
     Wend
     ProcedureReturn *seeker
@@ -38,9 +38,9 @@ ProcedureDLL Pulse_Seeker_CompareNC(*MemAdr1.byte, *MemAdr2.byte, size.l)   ; A 
   
   If size>0
     While size>0
-      *MemChr1=?MCNC_data+*MemAdr1\b
-      *MemChr2=?MCNC_data+*MemAdr2\b
-      If *MemChr1\b<>*MemChr2\b
+      *MemChr1 = ?MCNC_data + *MemAdr1\b
+      *MemChr2 = ?MCNC_data + *MemAdr2\b
+      If *MemChr1\b <> *MemChr2\b
         ProcedureReturn #False
       EndIf
       *MemAdr1+1 : *MemAdr2+1
@@ -78,7 +78,7 @@ Procedure Pulse_Seeker_SkipSpace(*seeker.sk)
 EndProcedure
 
 Procedure Pulse_Seeker_FindByte(*seeker.sk, byte.b)
-  While *seeker\b<>byte
+  While *seeker\b <> byte
     *seeker+1
   Wend
   ProcedureReturn *seeker  
