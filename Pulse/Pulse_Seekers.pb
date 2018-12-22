@@ -13,7 +13,7 @@ EndStructure
 
 CompilerIf #PB_Compiler_OS = #PB_OS_Windows
   #EOL_SIZE=2
-  Procedure Pulse_Seeker_NextEol(*seeker.sk, *seeker_end)
+  Procedure.i Pulse_Seeker_NextEol(*seeker.sk, *seeker_end)
     While *seeker < *seeker_end  And *seeker\w <> 2573    ; 0D 0A
       *seeker+1
     Wend
@@ -21,7 +21,7 @@ CompilerIf #PB_Compiler_OS = #PB_OS_Windows
   EndProcedure
 CompilerElse
   #EOL_SIZE=1
-  Procedure Pulse_Seeker_NextEol(*seeker.sk, *seeker_end)
+  Procedure.i Pulse_Seeker_NextEol(*seeker.sk, *seeker_end)
     While *seeker < *seeker_end  And *seeker\b <> 10      ; 0A
       *seeker+1
     Wend
@@ -33,7 +33,7 @@ Macro Pulse_Seeker_Compare(Mem1, Mem2, Size)    ; We can't improve on PB's funct
   CompareMemory(Mem1, Mem2, Size)
 EndMacro
 
-ProcedureDLL Pulse_Seeker_CompareNC(*MemAdr1.byte, *MemAdr2.byte, size.l)   ; A no-case memory compare function.
+Procedure.l Pulse_Seeker_CompareNC(*MemAdr1.byte, *MemAdr2.byte, size.l)   ; A no-case memory compare function.
   Protected *MemChr1.byte, *MemChr2.byte
   
   If size>0
@@ -70,14 +70,14 @@ DataSection
   Data.a 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255
 EndDataSection
 
-Procedure Pulse_Seeker_SkipSpace(*seeker.sk)
+Procedure.i Pulse_Seeker_SkipSpace(*seeker.sk)
   While *seeker\b = 32 Or *seeker\b = 9
     *seeker+1
   Wend
   ProcedureReturn *seeker
 EndProcedure
 
-Procedure Pulse_Seeker_FindByte(*seeker.sk, byte.b)
+Procedure.i Pulse_Seeker_FindByte(*seeker.sk, byte.b)
   While *seeker\b <> byte
     *seeker+1
   Wend
