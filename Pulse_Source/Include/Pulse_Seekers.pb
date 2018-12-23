@@ -58,30 +58,30 @@ ProcedureDLL Pulse_Seeker_CompareNC_Ex(*MemAdr1.byte, *MemAdr2.byte, size.l)
   CompilerIf #PB_Compiler_Processor = #PB_Processor_x86 
     EnableASM
     ! cmp dword [p.v_size],0
-    ! jle _ZeroIt ;ll_pulse_seeker_comparenc_ex
+    ! jle .ZeroIt
     ! push edi
     ! push esi
     ! mov edi,dword [p.p_MemAdr1+8]
     ! mov esi,dword [p.p_MemAdr2+8]
     ! xor ecx,ecx
-    LoopIt:
+    !.LoopIt:
     ! movzx eax,byte [esi+ecx]
     ! mov dl,byte [eax+l_mcnc_data]
     ! movzx eax,byte [edi+ecx]
     ! cmp dl,byte [eax+l_mcnc_data]
-    ! jnz ll_pulse_seeker_comparenc_ex_nomatch
+    ! jnz .NoMatch
     ! inc ecx
     ! cmp ecx,dword [p.v_size+8]
-    ! jne ll_pulse_seeker_comparenc_ex_loopit
+    ! jne .loopit
     ! pop esi
     ! pop edi
     ! mov eax,1
     ProcedureReturn
-    NoMatch:
+    !.NoMatch:
     ! pop esi
     ! pop edi
-    DisableASM
-    !_ZeroIt:
+    !.ZeroIt:
+    DisableAsm
   CompilerElse
     EnableASM
     ! cmp dword [p.v_size],0
