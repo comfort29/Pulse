@@ -30,7 +30,7 @@ CompilerElse
 CompilerEndIf
 
 Macro Pulse_Seeker_Compare(Mem1, Mem2, Size)    ; We can't improve on PB's function, so wrap to macro.
-  CompareMemory(Mem1, Mem2, Size)               ; I WAS WRONG - _strncmp@12 beats it.
+  CompareMemory(Mem1, Mem2, Size)               ; I WAS WRONG - _memcmp@12 beats it.
 EndMacro
 
 Procedure.l Pulse_Seeker_CompareNC(*MemAdr1.byte, *MemAdr2.byte, size.l)   ; A no-case memory compare function.
